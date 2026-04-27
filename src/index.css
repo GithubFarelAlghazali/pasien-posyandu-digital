@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary-pink: #FF8AA1;
+  --color-secondary-pink: #D81B60;
+  --color-accent-pink: #FF5C8A;
+  --color-bg-pink: #FFF0F3;
+  --color-character-blue: #85D3FF;
+  --color-character-pink: #FFB6C1;
+  
+  --shadow-cute: 0 4px 0 0 rgba(216, 27, 96, 0.2);
+  --shadow-button: 0 4px 15px rgba(255, 138, 161, 0.4);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-pink text-gray-800 font-sans antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.pink-gradient {
+  background: linear-gradient(180deg, #FF8AA1 0%, #FF5C8A 100%);
+}
+
+.glass-card {
+  @apply bg-white/80 backdrop-blur-sm border border-white/40;
+}
+
+.bubble-left {
+  @apply relative bg-white border-2 border-primary-pink rounded-2xl rounded-tl-none p-4;
+}
+
+.bubble-right {
+  @apply relative bg-bg-pink border-2 border-primary-pink rounded-2xl rounded-tr-none p-4;
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
