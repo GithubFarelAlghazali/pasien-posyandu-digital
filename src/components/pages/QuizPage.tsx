@@ -4,6 +4,7 @@ import { useUser } from '@/src/context/UserContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, Check, X } from 'lucide-react';
 import Button from '@/src/components/atoms/Button';
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function QuizPage() {
   const navigate = useNavigate();
@@ -30,7 +31,9 @@ export default function QuizPage() {
   return (
     <div className="flex flex-col min-h-screen p-8 bg-bg-pink">
       <div className="bg-white rounded-xl py-2 px-4 flex items-center self-start gap-2 mb-12 shadow-sm border border-primary-pink/10">
-        <div className="w-6 h-6 bg-yellow-300 rounded-lg"></div>
+        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center p-0.5 border border-pink-100">
+          <img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
+        </div>
         <span className="font-bold text-gray-700">Kuis Kesehatan</span>
       </div>
 

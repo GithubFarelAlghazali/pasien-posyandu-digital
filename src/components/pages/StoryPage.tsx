@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/src/context/UserContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { Zap, Menu } from 'lucide-react';
+import { Zap } from 'lucide-react';
 import Button from '@/src/components/atoms/Button';
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function StoryPage() {
   const navigate = useNavigate();
@@ -47,8 +48,8 @@ export default function StoryPage() {
               animate={{ opacity: 1, x: 0 }}
               className={`flex items-start gap-4 ${d.speaker === 'child' ? 'flex-row-reverse' : 'flex-row'}`}
             >
-              <div className="w-16 h-16 rounded-full bg-bg-pink border-2 border-primary-pink flex items-center justify-center text-4xl shrink-0">
-                {d.speaker === 'child' ? (profile.character === 'boy' ? '👦' : '👧') : '👩'}
+              <div className="w-16 h-16 rounded-full bg-white border-2 border-primary-pink flex items-center justify-center shrink-0 p-1">
+                <img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
               </div>
               <div className={d.speaker === 'child' ? 'bubble-right' : 'bubble-left'}>
                 <p className="font-bold text-gray-800 leading-tight">{d.text}</p>
@@ -90,8 +91,8 @@ export default function StoryPage() {
             className="space-y-6"
           >
             <motion.div className="flex items-start gap-4 flex-row-reverse">
-              <div className="w-16 h-16 rounded-full bg-bg-pink border-2 border-primary-pink flex items-center justify-center text-4xl">
-                 {profile.character === 'boy' ? '👦' : '👧'}
+              <div className="w-16 h-16 rounded-full bg-white border-2 border-primary-pink flex items-center justify-center p-1">
+                 <img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
               </div>
               <div className="bubble-right">
                 <p className="font-bold text-gray-800 leading-tight">

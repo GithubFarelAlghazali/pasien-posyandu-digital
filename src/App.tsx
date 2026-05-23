@@ -17,7 +17,9 @@ import EducationPage from './components/pages/EducationPage';
 import HistoryPage from './components/pages/HistoryPage';
 import FeedbackPage from './components/pages/FeedbackPage';
 import MobileLayout from './components/templates/MobileLayout';
-
+import TebakMakananSehatPage from './components/pages/TebakMakananSehatPage';
+import PuzzleGiziSeimbangPage from './components/pages/PuzzleGiziSeimbangPage';
+import QuizImunisasiPage from './components/pages/QuizImunisasiPage';
 function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
@@ -37,6 +39,9 @@ function AppRoutes() {
         <Route path="/story" element={<MobileLayout><StoryPage /></MobileLayout>} />
         <Route path="/quiz" element={<MobileLayout><QuizPage /></MobileLayout>} />
         <Route path="/profile" element={<MobileLayout><ProfilePage /></MobileLayout>} />
+        <Route path="/game/tebak-makanan-sehat" element={<TebakMakananSehatPage />} />
+        <Route path="/game/puzzle-gizi-seimbang" element={<PuzzleGiziSeimbangPage />} />
+        <Route path="/game/quiz-imunisasi" element={<QuizImunisasiPage />} />
       </Routes>
     </AnimatePresence>
   );

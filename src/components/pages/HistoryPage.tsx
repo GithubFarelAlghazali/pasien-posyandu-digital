@@ -1,6 +1,7 @@
 import { Bell, ChevronRight, Filter } from 'lucide-react';
 import BottomNav from '@/src/components/organisms/BottomNav';
 import { motion } from 'motion/react';
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function HistoryPage() {
   const records = [
@@ -37,10 +38,13 @@ export default function HistoryPage() {
     <div className="bg-gray-50 min-h-screen pb-24">
       <div className="bg-white px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100 flex items-center justify-center">
-             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maria" alt="User" />
+          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100 bg-white flex items-center justify-center p-1">
+             <img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
           </div>
-          <span className="text-secondary-pink font-bold text-lg">Posyandu Kita</span>
+          <div>
+						<p className="text-secondary-pink font-black text-base leading-tight">Pasien - CAKET</p>
+						<p className="text-[10px] text-gray-400 font-bold">Catatan Kesehatan</p>
+					</div>
         </div>
         <Bell className="text-pink-300" />
       </div>

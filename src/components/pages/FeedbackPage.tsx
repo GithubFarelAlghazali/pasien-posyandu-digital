@@ -1,8 +1,9 @@
-import { ArrowLeft, User, Send } from 'lucide-react';
+import { ArrowLeft, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import Button from '@/src/components/atoms/Button';
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function FeedbackPage() {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ export default function FeedbackPage() {
           <ArrowLeft className="text-gray-800" />
         </button>
         <h1 className="text-xl font-bold text-gray-800 text-center flex-1">Keluhan & Feedback</h1>
-        <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-            <User className="text-secondary-pink" />
+        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 border border-pink-100">
+            <img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
         </div>
       </div>
 

@@ -1,137 +1,265 @@
-import { Bell, Zap, Star, Play, FileText, Award } from "lucide-react";
-import BottomNav from "@/src/components/organisms/BottomNav";
+import {
+	ArrowLeft,
+	Bell,
+	BookOpen,
+	Brain,
+	ChevronRight,
+	Gamepad2,
+	HeartPulse,
+	Play,
+	ShieldCheck,
+	Sparkles,
+	Syringe,
+	Utensils,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import Button from "@/src/components/atoms/Button";
+import BottomNav from "@/src/components/organisms/BottomNav";
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function EducationPage() {
+	const navigate = useNavigate();
+
+	const materials = [
+		{
+			title: "Gizi Seimbang",
+			desc: "Pelajari pola makan sehat untuk keluarga.",
+			icon: <Utensils className="w-8 h-8 text-pink-600" />,
+			bg: "bg-pink-50",
+			border: "border-pink-100",
+			emoji: "🥗",
+		},
+		{
+			title: "Imunisasi",
+			desc: "Kenali jadwal dan manfaat imunisasi.",
+			icon: <Syringe className="w-8 h-8 text-blue-600" />,
+			bg: "bg-blue-50",
+			border: "border-blue-100",
+			emoji: "💉",
+		},
+		{
+			title: "Tumbuh Kembang",
+			desc: "Pantau perkembangan si kecil.",
+			icon: <HeartPulse className="w-8 h-8 text-purple-600" />,
+			bg: "bg-purple-50",
+			border: "border-purple-100",
+			emoji: "👶",
+		},
+	];
+
+	const games = [
+		{
+			title: "Tebak Makanan Sehat",
+			desc: "Pilih makanan sehat untuk tubuhmu!",
+			emoji: "🍎",
+			button: "bg-secondary-pink",
+			bg: "bg-pink-50",
+			path: "/game/tebak-makanan-sehat",
+		},
+		{
+			title: "Puzzle Gizi Seimbang",
+			desc: "Susun piring makan sehat dengan tepat.",
+			emoji: "🧩",
+			button: "bg-green-500",
+			bg: "bg-green-50",
+			path: "/game/puzzle-gizi-seimbang",
+		},
+		{
+			title: "Quiz Imunisasi",
+			desc: "Jawab pertanyaan seputar imunisasi.",
+			emoji: "📋",
+			button: "bg-blue-500",
+			bg: "bg-blue-50",
+			path: "/game/quiz-imunisasi",
+		},
+	];
+
 	return (
 		<div className="bg-gray-50 min-h-screen pb-24">
-			<div className="bg-white px-6 py-4 flex justify-between items-center">
+			<div className="bg-white px-5 py-4 flex justify-between items-center shadow-sm sticky top-0 z-20">
 				<div className="flex items-center gap-3">
-					<div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-100 flex items-center justify-center">
-						<img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maria" alt="User" />
+					<button
+						onClick={() => navigate(-1)}
+						className="w-10 h-10 rounded-2xl bg-pink-50 flex items-center justify-center"
+					>
+						<ArrowLeft className="text-secondary-pink w-5 h-5" />
+					</button>
+
+					<div className="w-10 h-10 rounded-full bg-white border-2 border-pink-100 p-1.5 flex items-center justify-center shadow-sm">
+						<img src={logoPosyandu} alt="Logo CAKET" className="w-full h-full object-contain" />
 					</div>
-					<span className="text-secondary-pink font-bold text-lg">Posyandu Kita</span>
+
+					<div>
+						<p className="text-secondary-pink font-black text-sm leading-tight">
+							Pasien - CAKET
+						</p>
+						<p className="text-[10px] text-gray-400 font-bold">
+							Catatan Kesehatan
+						</p>
+					</div>
 				</div>
-				<Bell className="text-pink-300" />
+
+				<button className="w-10 h-10 rounded-full bg-pink-50 flex items-center justify-center relative">
+					<Bell className="text-secondary-pink w-5 h-5" />
+					<span className="absolute top-2 right-2 w-2 h-2 bg-secondary-pink rounded-full" />
+				</button>
 			</div>
 
-			<div className="p-6">
-				<h1 className="text-3xl font-black text-gray-800 mb-1 leading-tight">Pusat Edukasi</h1>
-				<p className="text-gray-400 font-bold mb-8">Belajar sambil bermain untuk si kecil.</p>
-
-				{/* Stats Section */}
-				<div className="flex gap-4 mb-8">
-					<div className="flex-1 bg-secondary-pink text-white rounded-3xl p-6 shadow-lg relative overflow-hidden">
-						<Zap className="absolute top-2 right-2 w-10 h-10 opacity-20" />
-						<p className="text-[10px] font-bold opacity-80 uppercase mb-1">Energi Belajar</p>
-						<div className="flex items-baseline gap-2">
-							<span className="text-3xl font-black italic">85</span>
-							<span className="text-sm font-bold opacity-80">%</span>
-						</div>
+			<div className="p-5 space-y-7">
+				<motion.div
+					initial={{ opacity: 0, y: 18 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="bg-white rounded-[34px] p-5 shadow-sm border border-pink-50 relative overflow-hidden"
+				>
+					<div className="absolute -right-8 -top-8 w-28 h-28 bg-pink-100 rounded-full opacity-60" />
+					<div className="absolute right-6 bottom-4 text-6xl opacity-90">
+						🩺
 					</div>
-					<div className="flex-1 bg-pink-100 text-secondary-pink rounded-3xl p-6 shadow-sm border border-pink-200">
-						<Star className="w-5 h-5 fill-secondary-pink mb-1" />
-						<p className="text-[10px] font-bold opacity-80 uppercase mb-1">Poin Reward</p>
-						<div className="flex items-baseline gap-1">
-							<span className="text-3xl font-black italic">1,250</span>
-							<span className="text-[8px] font-bold">pts</span>
-						</div>
-					</div>
-				</div>
 
-				{/* Daily Quiz Card */}
-				<div className="bg-white rounded-3xl p-6 border-2 border-pink-50 shadow-sm flex items-center justify-between mb-8">
-					<div className="flex items-center gap-4">
-						<div className="w-12 h-12 bg-secondary-pink/10 rounded-xl flex items-center justify-center">
-							<FileText className="text-secondary-pink" />
+					<div className="relative flex items-center gap-4">
+						<div className="w-16 h-16 rounded-3xl bg-pink-100 flex items-center justify-center shadow-inner">
+							<BookOpen className="text-secondary-pink w-8 h-8" />
 						</div>
-						<div>
-							<p className="font-black text-gray-800">Kuis Harian</p>
-							<p className="text-[10px] text-gray-400 font-bold">+50 Poin hari ini</p>
+						<div className="pr-12">
+							<h1 className="text-3xl font-black text-gray-800 leading-tight">
+								Edukasi Kesehatan
+							</h1>
+							<p className="text-gray-500 text-sm font-medium mt-1">
+								Belajar kesehatan dengan cara yang menyenangkan!
+							</p>
 						</div>
-					</div>
-					<button className="bg-secondary-pink text-white px-6 py-2 rounded-full font-bold text-sm shadow-md active:scale-95 transition-transform">Mulai</button>
-				</div>
-
-				{/* Educational Game */}
-				<h3 className="text-xl font-bold text-gray-800 mb-4">Game Edukasi</h3>
-				<motion.div whileHover={{ scale: 1.02 }} className="relative rounded-[40px] overflow-hidden mb-8 h-64 shadow-2xl group cursor-pointer">
-					<img src="https://images.unsplash.com/photo-1540331548438-50bad0c4fbbd?q=80&w=2574&auto=format&fit=crop" alt="MPASI Game" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-					<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8 flex flex-col justify-end">
-						<div className="bg-black/40 backdrop-blur-md self-start px-4 py-1.5 rounded-full text-white text-[10px] font-bold border border-white/20 mb-4 flex items-center gap-2">
-							<div className="w-2 h-2 bg-white rounded-full"></div> Roleplay
-						</div>
-						<h4 className="text-2xl font-black text-white italic mb-2">Simulasi Hidup Sehat</h4>
-						<p className="text-white/70 text-xs font-medium leading-relaxed mb-6 line-clamp-2">Praktekkan cara menyusun menu MPASI yang seimbang untuk usia 6-9 bulan...</p>
-						<Button
-							className="h-14"
-							onClick={() => {
-								window.location.href = "/kids-adventure";
-							}}
-						>
-							<Play className="fill-white w-4 h-4 mr-2" />
-							Mainkan Sekarang
-						</Button>
 					</div>
 				</motion.div>
 
-				{/* Material */}
-				<div className="flex justify-between items-center mb-6">
-					<h3 className="text-xl font-bold text-gray-800">Materi Belajar</h3>
-					<button className="text-secondary-pink font-bold text-sm">Lihat Semua</button>
-				</div>
-				<div className="grid grid-cols-2 gap-4 mb-8">
-					<div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex flex-col gap-4">
-						<div className="relative rounded-2xl overflow-hidden aspect-square flex items-center justify-center">
-							<img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop" alt="V" className="absolute inset-0 object-cover w-full h-full" />
-							<div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-								<Play className="text-white w-8 h-8 fill-white opacity-80" />
-							</div>
+				<section>
+					<div className="flex items-center gap-3 mb-4">
+						<div className="w-10 h-10 rounded-2xl bg-pink-100 flex items-center justify-center">
+							<BookOpen className="text-secondary-pink w-5 h-5" />
 						</div>
-						<div className="px-1">
-							<p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Video</p>
-							<p className="font-bold text-gray-800 leading-tight">Teknik Pijat Bayi Dasar...</p>
-						</div>
+						<h2 className="text-2xl font-black text-gray-800">
+							Materi Edukasi
+						</h2>
 					</div>
-					<div className="space-y-4">
-						<div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-3">
-							<div className="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center shrink-0">
-								<FileText className="text-secondary-pink w-5 h-5" />
-							</div>
-							<div className="min-w-0">
-								<p className="text-[8px] bg-gray-100 px-1.5 py-0.5 rounded-full inline-block font-black text-gray-500 mb-1">PDF</p>
-								<p className="font-bold text-gray-800 text-[11px] leading-tight truncate">Resep MPASI Pertama...</p>
-							</div>
-						</div>
-						<div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 flex items-center gap-3">
-							<div className="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center shrink-0">
-								<FileText className="text-secondary-pink w-5 h-5" />
-							</div>
-							<div className="min-w-0">
-								<p className="text-[8px] bg-gray-100 px-1.5 py-0.5 rounded-full inline-block font-black text-gray-500 mb-1">Artikel</p>
-								<p className="font-bold text-gray-800 text-[11px] leading-tight truncate">Jadwal Imunisasi Wajib...</p>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				{/* Badges */}
-				<h3 className="text-xl font-bold text-gray-800 mb-6">Lencana Saya</h3>
-				<div className="flex justify-between px-2 pb-8">
-					{[
-						{ icon: <Award className="text-pink-600" />, label: "Pemula Gizi", active: true },
-						//  { icon: <Check className="text-pink-600" />, label: 'Rajin Kuis', active: true },
-						{ icon: <Award />, label: "Pakar Imunisasi", active: false },
-						{ icon: <Award />, label: "Master MPASI", active: false },
-					].map((badge, idx) => (
-						<div key={idx} className="flex flex-col items-center gap-3 w-16">
-							<div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-inner ${badge.active ? "bg-pink-100 border-2 border-secondary-pink/20" : "bg-gray-100 grayscale"}`}>{badge.icon}</div>
-							<span className={`text-[10px] text-center font-bold leading-tight ${badge.active ? "text-gray-800" : "text-gray-400"}`}>{badge.label}</span>
+					<div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
+						{materials.map((item, idx) => (
+							<motion.div
+								key={item.title}
+								initial={{ opacity: 0, x: 20 }}
+								animate={{ opacity: 1, x: 0 }}
+								transition={{ delay: idx * 0.1 }}
+								className={`${item.bg} ${item.border} min-w-[240px] rounded-[32px] p-5 border shadow-sm relative overflow-hidden`}
+							>
+								<div className="absolute -right-6 -bottom-6 text-8xl opacity-90">
+									{item.emoji}
+								</div>
+
+								<Sparkles className="absolute top-5 right-5 w-5 h-5 text-secondary-pink opacity-60" />
+
+								<div className="relative">
+									<div className="w-12 h-12 rounded-2xl bg-white/80 flex items-center justify-center mb-5 shadow-sm">
+										{item.icon}
+									</div>
+
+									<h3 className="text-2xl font-black text-gray-800 leading-tight mb-2">
+										{item.title}
+									</h3>
+
+									<p className="text-sm text-gray-600 font-medium leading-relaxed mb-6 w-36">
+										{item.desc}
+									</p>
+
+									<button className="bg-white text-secondary-pink px-4 py-2 rounded-full font-black text-sm shadow-sm flex items-center gap-2">
+										Lihat Materi
+										<ChevronRight className="w-4 h-4" />
+									</button>
+								</div>
+							</motion.div>
+						))}
+					</div>
+				</section>
+
+				<section>
+					<div className="flex justify-between items-center mb-4">
+						<div className="flex items-center gap-3">
+							<div className="w-10 h-10 rounded-2xl bg-pink-100 flex items-center justify-center">
+								<Gamepad2 className="text-secondary-pink w-5 h-5" />
+							</div>
+
+							<h2 className="text-2xl font-black text-gray-800">
+								Game Edukasi
+							</h2>
 						</div>
-					))}
-				</div>
+
+						<button className="text-secondary-pink font-black text-sm flex items-center gap-1">
+							Lihat Semua
+							<ChevronRight className="w-4 h-4" />
+						</button>
+					</div>
+
+					<div className="space-y-4">
+						{games.map((game, idx) => (
+							<motion.div
+								key={game.title}
+								initial={{ opacity: 0, y: 20 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ delay: idx * 0.12 }}
+								className={`${game.bg} rounded-[34px] p-5 border border-white shadow-sm relative overflow-hidden min-h-[170px]`}
+							>
+								<div className="absolute -right-3 -bottom-5 text-8xl drop-shadow-sm">
+									{game.emoji}
+								</div>
+
+								<div className="absolute right-20 top-5">
+									<Brain className="w-9 h-9 text-secondary-pink opacity-20" />
+								</div>
+
+								<div className="relative w-7/12">
+									<h3 className="text-2xl font-black text-gray-800 leading-tight mb-3">
+										{game.title}
+									</h3>
+
+									<p className="text-sm text-gray-600 font-medium leading-relaxed mb-5">
+										{game.desc}
+									</p>
+
+									<button
+										onClick={() => navigate(game.path)}
+										className={`${game.button} text-white px-5 py-3 rounded-full font-black text-sm shadow-lg flex items-center gap-2 active:scale-95 transition-transform`}
+									>
+										<Play className="w-4 h-4 fill-white" />
+										Mainkan
+									</button>
+								</div>
+							</motion.div>
+						))}
+					</div>
+				</section>
+
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ delay: 0.4 }}
+					className="pink-gradient rounded-[34px] p-6 text-white shadow-xl shadow-primary-pink/20"
+				>
+					<div className="flex items-center gap-4">
+						<div className="w-14 h-14 rounded-3xl bg-white/20 border border-white/20 flex items-center justify-center">
+							<ShieldCheck className="w-7 h-7" />
+						</div>
+
+						<div>
+							<p className="text-[10px] font-bold opacity-80 uppercase">
+								Progress Belajar
+							</p>
+							<h3 className="text-2xl font-black">3 Materi selesai</h3>
+							<p className="text-sm text-white/80 font-medium">
+								Terus belajar untuk menjaga kesehatan.
+							</p>
+						</div>
+					</div>
+				</motion.div>
 			</div>
+
 			<BottomNav />
 		</div>
 	);

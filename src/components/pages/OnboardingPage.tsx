@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "@/src/context/UserContext";
 import Button from "@/src/components/atoms/Button";
 import { motion } from "motion/react";
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function OnboardingPage() {
 	const navigate = useNavigate();
@@ -30,9 +31,9 @@ export default function OnboardingPage() {
 					className={`relative w-40 rounded-3xl overflow-hidden border-2 transition-all cursor-pointer ${selectedChar === "boy" ? "border-primary-pink scale-105 shadow-lg" : "border-transparent opacity-80"}`}
 				>
 					<div className="bg-character-blue h-32 flex items-center justify-center pt-4">
-						<span className="text-7xl">👦</span>
+						<img src={logoPosyandu} alt="Logo Posyandu" className="w-24 h-24 object-contain" />
 					</div>
-					<div className="bg-white py-3 text-center font-bold text-gray-700">Laki - Laki</div>
+					<div className="bg-white py-3 text-center font-bold text-gray-700">Karakter 1</div>
 				</motion.div>
 
 				{/* Girl Option */}
@@ -42,9 +43,9 @@ export default function OnboardingPage() {
 					className={`relative w-40 rounded-3xl overflow-hidden border-2 transition-all cursor-pointer ${selectedChar === "girl" ? "border-primary-pink scale-105 shadow-lg" : "border-transparent opacity-80"}`}
 				>
 					<div className="bg-character-pink h-32 flex items-center justify-center pt-4">
-						<span className="text-7xl">👧</span>
+						<img src={logoPosyandu} alt="Logo Posyandu" className="w-24 h-24 object-contain" />
 					</div>
-					<div className="bg-white py-3 text-center font-bold text-gray-700">Perempuan</div>
+					<div className="bg-white py-3 text-center font-bold text-gray-700">Karakter 2</div>
 				</motion.div>
 			</div>
 

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { Play, RotateCcw, User, LogOut } from "lucide-react";
+import { Play, RotateCcw, LogOut } from "lucide-react";
 import { useUser } from "@/src/context/UserContext";
 import Button from "@/src/components/atoms/Button";
+import logoPosyandu from "@/src/assets/logo-posyandu.png";
 
 export default function HomePage() {
 	const navigate = useNavigate();
@@ -10,8 +11,8 @@ export default function HomePage() {
 	return (
 		<div className="flex flex-col items-center p-8 min-h-screen">
 			{/* Header with Icon */}
-			<div className="w-24 h-24 bg-bg-pink rounded-full flex items-center justify-center mb-8 border-2 border-white shadow-inner">
-				<span className="text-4xl text-secondary-pink">🩺</span>
+			<div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8 border-2 border-pink-200 shadow-inner p-2">
+				<img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
 			</div>
 
 			<div className="text-center mb-12">
@@ -35,8 +36,8 @@ export default function HomePage() {
 				</Button>
 
 				<Button variant="outline" className="text-gray-700" onClick={() => navigate("/profile")}>
-					<div className="w-10 h-10 border border-primary-pink/30 rounded-xl flex items-center justify-center mr-2">
-						<User className="text-primary-pink w-6 h-6" />
+					<div className="w-10 h-10 border border-primary-pink/30 rounded-xl flex items-center justify-center mr-2 p-1 bg-white">
+						<img src={logoPosyandu} alt="Logo Posyandu" className="w-full h-full object-contain" />
 					</div>
 					PROFIL & SKOR
 				</Button>
