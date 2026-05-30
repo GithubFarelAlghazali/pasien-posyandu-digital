@@ -20,12 +20,16 @@ import MobileLayout from './components/templates/MobileLayout';
 import TebakMakananSehatPage from './components/pages/TebakMakananSehatPage';
 import PuzzleGiziSeimbangPage from './components/pages/PuzzleGiziSeimbangPage';
 import QuizImunisasiPage from './components/pages/QuizImunisasiPage';
+import LoginPasienPage from './components/pages/LoginPasienPage';
+import RegisterPasienPage from './components/pages/RegisterPasienPage';
 function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes>
         {/* Adult Pasien Dashboard as the root page */}
         <Route path="/" element={<MobileLayout><AdultDashboardPage /></MobileLayout>} />
+        <Route path="/login" element={<LoginPasienPage />} />
+        <Route path="/register" element={<RegisterPasienPage />} />
         
         {/* Other Adult Pages */}
         <Route path="/schedule" element={<MobileLayout><SchedulePage /></MobileLayout>} />
