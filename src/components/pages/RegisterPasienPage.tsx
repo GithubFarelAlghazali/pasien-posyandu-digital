@@ -6,7 +6,6 @@ import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function RegisterPasienPage() {
-<<<<<<< HEAD
 	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -26,32 +25,6 @@ export default function RegisterPasienPage() {
 		password: "",
 		confirmPassword: "",
 	});
-=======
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const [form, setForm] = useState({
-    username: '',
-    email: '',
-    nik: '',
-    alamat: '',
-    tanggalLahir: '',
-    telp: '',
-    tipe: '',
-    password: '',
-    confirmPassword: '',
-  });
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
->>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
