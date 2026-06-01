@@ -8,16 +8,7 @@ import { useAuth } from "@/src/context/AuthContext";
 
 export default function AdultDashboardPage() {
 	const navigate = useNavigate();
-	const [user, setUser] = useState<any>(null);
-
-	useEffect(() => {
-		const savedUser = localStorage.getItem("pasien");
-
-		if (savedUser) {
-			setUser(JSON.parse(savedUser));
-		}
-	}, []);
-
+	const { user, userData } = useAuth();
 	return (
 		<div className="bg-gray-50 min-h-screen pb-24">
 			<div className="bg-white px-6 py-4 flex justify-between items-center shadow-sm">
