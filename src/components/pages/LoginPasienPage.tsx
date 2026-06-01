@@ -43,7 +43,7 @@ export default function LoginPasienPage() {
 				}
 
 				// 3. Alihkan navigasi (sesuaikan rute dashboard pasien milikmu, misalnya '/dashboard' atau '/')
-				navigate("/");
+				navigate("/pasien");
 			} else {
 				setError("Profil data pengguna tidak ditemukan di sistem.");
 			}

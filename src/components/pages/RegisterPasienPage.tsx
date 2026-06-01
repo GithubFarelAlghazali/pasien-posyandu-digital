@@ -21,7 +21,8 @@ export default function RegisterPasienPage() {
 		tanggalLahir: "",
 		telepon: "",
 		tipe: "anak", // Nilai default awal: [anak, hamil, dewasa, lansia]
-		gender: "",
+		gender: "laki-laki",
+		password: "",
 		confirmPassword: "",
 	});
 
