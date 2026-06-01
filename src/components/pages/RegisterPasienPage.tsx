@@ -30,25 +30,9 @@ export default function RegisterPasienPage() {
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-<<<<<<< HEAD
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setError("");
-=======
-    if (
-      !form.username ||
-      !form.email ||
-      !form.nik ||
-      !form.alamat ||
-      !form.tanggalLahir ||
-      !form.telp ||
-      !form.tipe ||
-      !form.password
-    ) {
-      setError('Semua field wajib diisi.');
-      return;
-    }
->>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 
 		// 1. Validasi Kelengkapan Field Kontrol
 		if (!form.nama.trim() || !form.email.trim() || !form.nik.trim() || !form.alamat.trim() || !form.tanggalLahir || !form.telepon.trim() || !form.password) {
