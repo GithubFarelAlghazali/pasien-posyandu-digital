@@ -39,7 +39,7 @@ export default function AdultDashboardPage() {
 			<div className="p-6">
 				<motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
 					<h1 className="text-4xl font-black text-gray-800 mb-1 leading-tight tracking-tight">
-						Halo, {user?.username || user?.nama || "Pasien"}!
+						Halo, {user?.nama || "Pasien"}!
 					</h1>
 					<p className="text-gray-400 font-bold mb-8">
 						Semoga sehat selalu hari ini 🌸
