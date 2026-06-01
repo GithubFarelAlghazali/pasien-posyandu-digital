@@ -29,20 +29,6 @@ export interface PasienUser {
   dibuat_pada: string;
 }
 
-export interface HealthRecord {
-  id?: string;
-  beratBadan: number;
-  gulaDarah: number;
-  kader: string;
-  nama: string;
-  nik: string;
-  tekananDarah: {
-    distolik: number;
-    sistolik: number;
-  };
-  tinggiBadan: number;
-}
-
 function toFirestoreValue(value: unknown): FirestoreValue {
   if (value === null || value === undefined) return { nullValue: null };
   if (typeof value === 'string') return { stringValue: value };
