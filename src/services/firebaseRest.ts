@@ -136,19 +136,6 @@ export async function registerPasien(data: PasienUser) {
 
   const user = await addDocument('users', data);
 
-  await addDocument('healthRecords', {
-    beratBadan: 0,
-    gulaDarah: 0,
-    kader: '',
-    nama: data.username,
-    nik: data.nik,
-    tekananDarah: {
-      distolik: 0,
-      sistolik: 0,
-    },
-    tinggiBadan: 0,
-  });
-
   return user;
 }
 
