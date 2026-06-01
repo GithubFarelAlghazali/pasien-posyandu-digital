@@ -15,20 +15,45 @@ import {
 import { motion } from "motion/react";
 import BottomNav from "@/src/components/organisms/BottomNav";
 import logoPosyandu from "@/src/assets/logo-posyandu.png";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function hitungUsia(tanggalLahir: string) {
+	if (!tanggalLahir) return "-";
+
+	const lahir = new Date(tanggalLahir);
+	const sekarang = new Date();
+
+	let usia = sekarang.getFullYear() - lahir.getFullYear();
+	const bulan = sekarang.getMonth() - lahir.getMonth();
+
+	if (bulan < 0 || (bulan === 0 && sekarang.getDate() < lahir.getDate())) {
+		usia--;
+	}
+
+	return `${usia} Tahun`;
+}
 
 export default function ProfilePage() {
-	const patient = {
-		name: "Ahmad Rizky",
-		role: "Pasien Aktif",
-		age: "32 Tahun",
-		bloodType: "O+",
-		phone: "0812-3456-7890",
-		address: "Jakarta Selatan",
-		lastCheckup: "24 Okt 2023",
-		nextSchedule: "30 Okt 2023",
-		height: "175 cm",
-		weight: "65 kg",
+		const navigate = useNavigate();
+
+	const handleLogout = () => {
+		localStorage.removeItem("pasien");
+		localStorage.removeItem("pasienUser");
+		localStorage.removeItem("user");
+		localStorage.removeItem("currentUser");
+
+		navigate("/login");
 	};
+	const [patient, setPatient] = useState<any>(null);
+
+	useEffect(() => {
+		const savedUser = localStorage.getItem("pasien");
+
+		if (savedUser) {
+			setPatient(JSON.parse(savedUser));
+		}
+	}, []);
 
 	return (
 		<div className="bg-gray-50 min-h-screen pb-24">
@@ -65,10 +90,18 @@ export default function ProfilePage() {
 							<div>
 								<div className="bg-white/20 border border-white/20 px-3 py-1 rounded-full inline-flex items-center gap-2 mb-3">
 									<ShieldCheck className="w-3.5 h-3.5" />
-									<span className="text-[10px] font-bold uppercase">{patient.role}</span>
+									<span className="text-[10px] font-bold uppercase">
+										{patient?.role || "Pasien Aktif"}
+									</span>
 								</div>
-								<h1 className="text-3xl font-black italic leading-tight">{patient.name}</h1>
-								<p className="text-white/80 text-sm font-bold">ID Pasien: CK-2023-001</p>
+
+								<h1 className="text-3xl font-black italic leading-tight">
+									{patient?.username || "Pasien"}
+								</h1>
+
+								<p className="text-white/80 text-sm font-bold">
+									NIK: {patient?.nik || "-"}
+								</p>
 							</div>
 						</div>
 
@@ -81,13 +114,17 @@ export default function ProfilePage() {
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<UserRound className="w-5 h-5 mx-auto mb-2" />
 							<p className="text-[10px] font-bold opacity-80">Usia</p>
-							<p className="font-black">{patient.age}</p>
+							<p className="font-black">
+								{patient?.tanggalLahir ? hitungUsia(patient.tanggalLahir) : "-"}
+							</p>
 						</div>
+
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<HeartPulse className="w-5 h-5 mx-auto mb-2" />
 							<p className="text-[10px] font-bold opacity-80">Darah</p>
-							<p className="font-black">{patient.bloodType}</p>
+							<p className="font-black">-</p>
 						</div>
+
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<Stethoscope className="w-5 h-5 mx-auto mb-2" />
 							<p className="text-[10px] font-bold opacity-80">Status</p>
@@ -107,7 +144,7 @@ export default function ProfilePage() {
 							<Weight className="text-secondary-pink" />
 						</div>
 						<p className="text-xs text-gray-400 font-bold uppercase mb-1">Berat Badan</p>
-						<p className="text-3xl font-black text-gray-800 italic">{patient.weight}</p>
+						<p className="text-3xl font-black text-gray-800 italic">- kg</p>
 					</motion.div>
 
 					<motion.div
@@ -120,7 +157,7 @@ export default function ProfilePage() {
 							<Ruler className="text-secondary-pink" />
 						</div>
 						<p className="text-xs text-gray-400 font-bold uppercase mb-1">Tinggi Badan</p>
-						<p className="text-3xl font-black text-gray-800 italic">{patient.height}</p>
+						<p className="text-3xl font-black text-gray-800 italic">- cm</p>
 					</motion.div>
 				</div>
 
@@ -134,7 +171,7 @@ export default function ProfilePage() {
 							</div>
 							<div>
 								<p className="text-[10px] text-gray-400 font-bold uppercase">Nomor Telepon</p>
-								<p className="font-bold text-gray-800">{patient.phone}</p>
+								<p className="font-bold text-gray-800">{patient?.telp || "-"}</p>
 							</div>
 						</div>
 
@@ -144,7 +181,7 @@ export default function ProfilePage() {
 							</div>
 							<div>
 								<p className="text-[10px] text-gray-400 font-bold uppercase">Alamat</p>
-								<p className="font-bold text-gray-800">{patient.address}</p>
+								<p className="font-bold text-gray-800">{patient?.alamat || "-"}</p>
 							</div>
 						</div>
 					</div>
@@ -162,16 +199,27 @@ export default function ProfilePage() {
 						<div className="bg-gray-50 rounded-3xl p-5">
 							<CalendarDays className="text-secondary-pink w-6 h-6 mb-3" />
 							<p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Pemeriksaan Terakhir</p>
-							<p className="font-black text-gray-800">{patient.lastCheckup}</p>
+							<p className="font-black text-gray-800">-</p>
 						</div>
+
 						<div className="bg-pink-50 rounded-3xl p-5">
 							<CalendarDays className="text-secondary-pink w-6 h-6 mb-3" />
 							<p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Jadwal Berikutnya</p>
-							<p className="font-black text-gray-800">{patient.nextSchedule}</p>
+							<p className="font-black text-gray-800">-</p>
 						</div>
 					</div>
 				</div>
 			</div>
+					<div className="px-6 pb-6">
+	<div className="bg-white rounded-[36px] p-6 border border-red-100 shadow-sm">
+		<button
+			onClick={handleLogout}
+			className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-3xl transition-all"
+		>
+			🚪 Logout
+		</button>
+	</div>
+</div>
 
 			<BottomNav />
 		</div>

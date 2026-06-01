@@ -28,7 +28,7 @@ export default function LoginPasienPage() {
         return;
       }
 
-      localStorage.setItem('pasienUser', JSON.stringify(pasien));
+      localStorage.setItem('pasien', JSON.stringify(pasien));
       navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login gagal.');

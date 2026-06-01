@@ -3,61 +3,77 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AnimatePresence } from 'motion/react';
-import { UserProvider } from './context/UserContext';
-import AdultDashboardPage from './components/pages/AdultDashboardPage';
-import OnboardingPage from './components/pages/OnboardingPage';
-import HomePage from './components/pages/HomePage';
-import ProfilePage from './components/pages/ProfilePage';
-import StoryPage from './components/pages/StoryPage';
-import QuizPage from './components/pages/QuizPage';
-import SchedulePage from './components/pages/SchedulePage';
-import EducationPage from './components/pages/EducationPage';
-import HistoryPage from './components/pages/HistoryPage';
-import FeedbackPage from './components/pages/FeedbackPage';
-import MobileLayout from './components/templates/MobileLayout';
-import TebakMakananSehatPage from './components/pages/TebakMakananSehatPage';
-import PuzzleGiziSeimbangPage from './components/pages/PuzzleGiziSeimbangPage';
-import QuizImunisasiPage from './components/pages/QuizImunisasiPage';
-import LoginPasienPage from './components/pages/LoginPasienPage';
-import RegisterPasienPage from './components/pages/RegisterPasienPage';
-function AppRoutes() {
-  return (
-    <AnimatePresence mode="wait">
-      <Routes>
-        {/* Adult Pasien Dashboard as the root page */}
-        <Route path="/" element={<MobileLayout><AdultDashboardPage /></MobileLayout>} />
-        <Route path="/login" element={<LoginPasienPage />} />
-        <Route path="/register" element={<RegisterPasienPage />} />
-        
-        {/* Other Adult Pages */}
-        <Route path="/schedule" element={<MobileLayout><SchedulePage /></MobileLayout>} />
-        <Route path="/history" element={<MobileLayout><HistoryPage /></MobileLayout>} />
-        <Route path="/education" element={<MobileLayout><EducationPage /></MobileLayout>} />
-        <Route path="/feedback" element={<MobileLayout><FeedbackPage /></MobileLayout>} />
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AnimatePresence } from "motion/react";
+import { UserProvider } from "./context/UserContext";
 
-        {/* Kids Gamification Flow */}
-        <Route path="/kids-adventure" element={<MobileLayout><HomePage /></MobileLayout>} />
-        <Route path="/onboarding" element={<OnboardingPage />} />
-        <Route path="/story" element={<MobileLayout><StoryPage /></MobileLayout>} />
-        <Route path="/quiz" element={<MobileLayout><QuizPage /></MobileLayout>} />
-        <Route path="/profile" element={<MobileLayout><ProfilePage /></MobileLayout>} />
-        <Route path="/game/tebak-makanan-sehat" element={<TebakMakananSehatPage />} />
-        <Route path="/game/puzzle-gizi-seimbang" element={<PuzzleGiziSeimbangPage />} />
-        <Route path="/game/quiz-imunisasi" element={<QuizImunisasiPage />} />
-      </Routes>
-    </AnimatePresence>
-  );
+import AdultDashboardPage from "./components/pages/AdultDashboardPage";
+import OnboardingPage from "./components/pages/OnboardingPage";
+import HomePage from "./components/pages/HomePage";
+import ProfilePage from "./components/pages/ProfilePage";
+import StoryPage from "./components/pages/StoryPage";
+import QuizPage from "./components/pages/QuizPage";
+import SchedulePage from "./components/pages/SchedulePage";
+import EducationPage from "./components/pages/EducationPage";
+import HistoryPage from "./components/pages/HistoryPage";
+import FeedbackPage from "./components/pages/FeedbackPage";
+import MobileLayout from "./components/templates/MobileLayout";
+import TebakMakananSehatPage from "./components/pages/TebakMakananSehatPage";
+import PuzzleGiziSeimbangPage from "./components/pages/PuzzleGiziSeimbangPage";
+import QuizImunisasiPage from "./components/pages/QuizImunisasiPage";
+import LoginPasienPage from "./components/pages/LoginPasienPage";
+import RegisterPasienPage from "./components/pages/RegisterPasienPage";
+
+function RootRedirect() {
+	const savedUser =
+		localStorage.getItem("pasien") ||
+		localStorage.getItem("user") ||
+		localStorage.getItem("currentUser");
+
+	if (savedUser) {
+		return (
+			<MobileLayout>
+				<AdultDashboardPage />
+			</MobileLayout>
+		);
+	}
+
+	return <Navigate to="/login" replace />;
+}
+
+function AppRoutes() {
+	return (
+		<AnimatePresence mode="wait">
+			<Routes>
+				<Route path="/" element={<RootRedirect />} />
+
+				<Route path="/login" element={<LoginPasienPage />} />
+				<Route path="/register" element={<RegisterPasienPage />} />
+
+				<Route path="/schedule" element={<MobileLayout><SchedulePage /></MobileLayout>} />
+				<Route path="/history" element={<MobileLayout><HistoryPage /></MobileLayout>} />
+				<Route path="/education" element={<MobileLayout><EducationPage /></MobileLayout>} />
+				<Route path="/feedback" element={<MobileLayout><FeedbackPage /></MobileLayout>} />
+
+				<Route path="/kids-adventure" element={<MobileLayout><HomePage /></MobileLayout>} />
+				<Route path="/onboarding" element={<OnboardingPage />} />
+				<Route path="/story" element={<MobileLayout><StoryPage /></MobileLayout>} />
+				<Route path="/quiz" element={<MobileLayout><QuizPage /></MobileLayout>} />
+				<Route path="/profile" element={<MobileLayout><ProfilePage /></MobileLayout>} />
+				<Route path="/game/tebak-makanan-sehat" element={<TebakMakananSehatPage />} />
+				<Route path="/game/puzzle-gizi-seimbang" element={<PuzzleGiziSeimbangPage />} />
+				<Route path="/game/quiz-imunisasi" element={<QuizImunisasiPage />} />
+			</Routes>
+		</AnimatePresence>
+	);
 }
 
 export default function App() {
-  return (
-    <UserProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </UserProvider>
-  );
+	return (
+		<UserProvider>
+			<Router>
+				<AppRoutes />
+			</Router>
+		</UserProvider>
+	);
 }
-

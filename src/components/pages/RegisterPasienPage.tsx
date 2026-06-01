@@ -43,6 +43,12 @@ export default function RegisterPasienPage() {
       setError('Konfirmasi password tidak sama.');
       return;
     }
+    const phoneRegex = /^\+62[0-9]{9,13}$/;
+
+    if (!phoneRegex.test(form.telp.trim())) {
+    setError('Nomor telepon harus diawali +62. Contoh: +6281234567890');
+      return;
+    }
 
     try {
       setLoading(true);
@@ -103,7 +109,14 @@ export default function RegisterPasienPage() {
             </div>
             <div>
               <label className="block text-base font-medium text-gray-950 mb-1.5">No. Telepon</label>
-              <input name="telp" value={form.telp} onChange={handleChange} type="tel" placeholder="08xxxxxxxxxx" className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100" />
+              <input
+                name="telp"
+                value={form.telp}
+                onChange={handleChange}
+                type="tel"
+                pattern="^\+62[0-9]{9,13}$"
+                placeholder="+6281234567890"
+                className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"/>
             </div>
           </div>
 

@@ -1,8 +1,7 @@
-const PROJECT_ID = import.meta.env.VITE_PROJECT_ID as string;
-const API_KEY = import.meta.env.VITE_API_KEY as string;
+const PROJECT_ID = import.meta.env.VITE_FIREBASE_PROJECT_ID as string;
+const API_KEY = import.meta.env.VITE_FIREBASE_API_KEY as string;
 
 const FIRESTORE_BASE_URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
-
 type FirestoreValue =
   | { stringValue: string }
   | { integerValue: string }
