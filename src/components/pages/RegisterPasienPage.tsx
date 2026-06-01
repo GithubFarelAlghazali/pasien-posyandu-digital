@@ -21,7 +21,7 @@ export default function RegisterPasienPage() {
 		tanggalLahir: "",
 		telepon: "",
 		tipe: "anak", // Nilai default awal: [anak, hamil, dewasa, lansia]
-		password: "",
+		gender: "",
 		confirmPassword: "",
 	});
 
@@ -79,10 +79,10 @@ export default function RegisterPasienPage() {
 				nik: form.nik.trim(),
 				alamat: form.alamat.trim(),
 				tanggalLahir: form.tanggalLahir,
+				gender: form.gender,
 				telepon: form.telepon.trim(),
-				role: "pasien", // Dikunci untuk tipe role akses pasien
-				tipe: form.tipe, // [anak, hamil, dewasa, lansia]
-				password: form.password, // Menyimpan string password di firestore sesuai struktur gambarmu
+				role: "pasien",
+				tipe: form.tipe,
 				dibuat_pada: new Date().toISOString(),
 			});
 
@@ -138,6 +138,19 @@ export default function RegisterPasienPage() {
 							placeholder="Masukkan Email Aktif"
 							className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100 font-medium text-gray-800"
 						/>
+					</div>
+
+					<div>
+						<label className="block text-sm font-black text-gray-700 mb-1.5 uppercase tracking-wide">Gender</label>
+						<select
+							name="gender"
+							value={form.gender}
+							onChange={handleChange}
+							className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-[15px] text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100 font-bold text-gray-700 cursor-pointer"
+						>
+							<option value="laki-laki">Laki-Laki</option>
+							<option value="perempuan">Perempuan</option>
+						</select>
 					</div>
 
 					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
