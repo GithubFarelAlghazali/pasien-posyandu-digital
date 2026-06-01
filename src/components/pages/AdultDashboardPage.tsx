@@ -74,8 +74,17 @@ export default function AdultDashboardPage() {
 			<div className="p-6">
 				{/* Welcome Section */}
 				<motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+<<<<<<< HEAD
 					<h1 className="text-4xl font-black text-gray-800 mb-1 leading-tight tracking-tight">Halo, {userData?.nama || "Pasien"}!</h1>
 					<p className="text-gray-400 font-bold mb-8">Semoga sehat selalu hari ini 🌸</p>
+=======
+					<h1 className="text-4xl font-black text-gray-800 mb-1 leading-tight tracking-tight">
+						Halo, {user?.nama || "Pasien"}!
+					</h1>
+					<p className="text-gray-400 font-bold mb-8">
+						Semoga sehat selalu hari ini 🌸
+					</p>
+>>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 				</motion.div>
 
 				{loading ? (

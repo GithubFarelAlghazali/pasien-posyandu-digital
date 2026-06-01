@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function RegisterPasienPage() {
+<<<<<<< HEAD
 	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -25,15 +26,57 @@ export default function RegisterPasienPage() {
 		password: "",
 		confirmPassword: "",
 	});
+=======
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [form, setForm] = useState({
+    username: '',
+    email: '',
+    nik: '',
+    alamat: '',
+    tanggalLahir: '',
+    telp: '',
+    tipe: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+>>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
+<<<<<<< HEAD
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setError("");
+=======
+    if (
+      !form.username ||
+      !form.email ||
+      !form.nik ||
+      !form.alamat ||
+      !form.tanggalLahir ||
+      !form.telp ||
+      !form.tipe ||
+      !form.password
+    ) {
+      setError('Semua field wajib diisi.');
+      return;
+    }
+>>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 
 		// 1. Validasi Kelengkapan Field Kontrol
 		if (!form.nama.trim() || !form.email.trim() || !form.nik.trim() || !form.alamat.trim() || !form.tanggalLahir || !form.telepon.trim() || !form.password) {
@@ -41,6 +84,7 @@ export default function RegisterPasienPage() {
 			return;
 		}
 
+<<<<<<< HEAD
 		// 2. Validasi Panjang NIK Lokal
 		if (form.nik.trim().length !== 16 || !/^\d+$/.test(form.nik.trim())) {
 			setError("NIK harus berupa 16 digit angka murni.");
@@ -57,6 +101,36 @@ export default function RegisterPasienPage() {
 			setError("Konfirmasi kata sandi tidak cocok.");
 			return;
 		}
+=======
+    if (form.password !== form.confirmPassword) {
+      setError('Konfirmasi password tidak sama.');
+      return;
+    }
+
+    const phoneRegex = /^\+62[0-9]{9,13}$/;
+
+    if (!phoneRegex.test(form.telp.trim())) {
+      setError('Nomor telepon harus diawali +62. Contoh: +6281234567890');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await registerPasien({
+        uid: crypto.randomUUID(),
+        nama: form.username.trim(),
+        email: form.email.trim(),
+        nik: form.nik.trim(),
+        alamat: form.alamat.trim(),
+        tanggalLahir: form.tanggalLahir,
+        telepon: form.telp.trim(),
+        tipe: form.tipe as 'anak' | 'dewasa' | 'hamil' | 'lansia',
+        password: form.password,
+        role: 'pasien',
+        dibuat_pada: new Date().toISOString(),
+      });
+>>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6
 
 		// 4. Validasi Pola Regex Telepon Standar +62
 		const phoneRegex = /^\+628[1-9][0-9]{7,10}$/;
@@ -68,6 +142,7 @@ export default function RegisterPasienPage() {
 		try {
 			setLoading(true);
 
+<<<<<<< HEAD
 			// 5. Daftarkan Kredensial ke Firebase Authentication
 			const userCredential = await createUserWithEmailAndPassword(auth, form.email.trim(), form.password);
 			const user = userCredential.user;
@@ -273,3 +348,180 @@ export default function RegisterPasienPage() {
 		</main>
 	);
 }
+=======
+        <h1 className="text-3xl font-bold text-center text-gray-950 mb-5">
+          Daftar Akun Pasien
+        </h1>
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              Nama Lengkap
+            </label>
+            <input
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              type="text"
+              placeholder="Masukkan Nama Lengkap"
+              className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              Email
+            </label>
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              type="email"
+              placeholder="Masukkan Email Aktif"
+              className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              NIK
+            </label>
+            <input
+              name="nik"
+              value={form.nik}
+              onChange={handleChange}
+              type="text"
+              placeholder="Masukkan NIK"
+              className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            />
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              Alamat
+            </label>
+            <textarea
+              name="alamat"
+              value={form.alamat}
+              onChange={handleChange}
+              placeholder="Masukkan alamat"
+              rows={2}
+              className="w-full resize-none rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-base font-medium text-gray-950 mb-1.5">
+                Tanggal Lahir
+              </label>
+              <input
+                name="tanggalLahir"
+                value={form.tanggalLahir}
+                onChange={handleChange}
+                type="date"
+                className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+              />
+            </div>
+
+            <div>
+              <label className="block text-base font-medium text-gray-950 mb-1.5">
+                No. Telepon
+              </label>
+              <input
+                name="telp"
+                value={form.telp}
+                onChange={handleChange}
+                type="tel"
+                pattern="^\+62[0-9]{9,13}$"
+                placeholder="+6281234567890"
+                className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              Tipe Pasien
+            </label>
+            <select
+              name="tipe"
+              value={form.tipe}
+              onChange={handleChange}
+              className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            >
+              <option value="">Pilih Tipe Pasien</option>
+              <option value="anak">Anak</option>
+              <option value="dewasa">Dewasa</option>
+              <option value="hamil">Ibu Hamil</option>
+              <option value="lansia">Lansia</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-base font-medium text-gray-950 mb-1.5">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Min. 8 karakter"
+                className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 pr-12 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-900"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+          <div className="relative">
+            <input
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="Ulangi kata sandi"
+              className="w-full rounded-2xl border border-pink-200 bg-[#fff7fb] px-4 py-3.5 pr-12 text-base outline-none transition focus:border-[#e6007e] focus:ring-4 focus:ring-pink-100"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-900"
+            >
+              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {error && (
+            <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-2xl bg-[#e6007e] py-4 text-lg font-bold text-white shadow-lg shadow-pink-200 transition hover:bg-[#d00072] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {loading ? 'Mendaftarkan...' : 'Register'}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-slate-500">
+          Sudah punya akun?{' '}
+          <Link to="/login" className="font-bold text-[#ff1493] hover:underline">
+            Login
+          </Link>
+        </p>
+      </section>
+    </main>
+  );
+}
+>>>>>>> c28250b23430fda7b1b3bb0b2ce806edc341a0b6

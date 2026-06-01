@@ -96,7 +96,7 @@ export default function ProfilePage() {
 								</div>
 
 								<h1 className="text-3xl font-black italic leading-tight">
-									{patient?.username || "Pasien"}
+									{patient?.nama || "Pasien"}
 								</h1>
 
 								<p className="text-white/80 text-sm font-bold">
@@ -171,7 +171,7 @@ export default function ProfilePage() {
 							</div>
 							<div>
 								<p className="text-[10px] text-gray-400 font-bold uppercase">Nomor Telepon</p>
-								<p className="font-bold text-gray-800">{patient?.telp || "-"}</p>
+								<p className="font-bold text-gray-800">{patient?.telepon || "-"}</p>
 							</div>
 						</div>
 
