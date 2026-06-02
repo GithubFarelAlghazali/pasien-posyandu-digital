@@ -1,22 +1,25 @@
-import {
-	Bell,
-	CalendarDays,
-	ChevronRight,
-	Edit3,
-	HeartPulse,
-	MapPin,
-	Phone,
-	Ruler,
-	ShieldCheck,
-	Stethoscope,
-	UserRound,
-	Weight,
-} from "lucide-react";
+import { Bell, CalendarDays, ChevronRight, Edit3, HeartPulse, MapPin, Phone, Ruler, ShieldCheck, Stethoscope, UserRound, Weight } from "lucide-react";
 import { motion } from "motion/react";
 import BottomNav from "@/src/components/organisms/BottomNav";
 import logoPosyandu from "@/src/assets/logo-posyandu.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/src/context/AuthContext"; // Mengambil sesi terpusat
+import { auth, db } from "@/src/services/firebase/config";
+import { signOut } from "firebase/auth";
+import { collection, query, where, onSnapshot, orderBy, limit } from "firebase/firestore";
+
+interface MedicalRecord {
+	beratBadan: number | null;
+	tinggiBadan: number | null;
+	gulaDarah: number | null;
+	tekananDarah?: {
+		sistolik: number | null;
+		distolik: number | null;
+	};
+	status_pertumbuhan: string;
+	waktuPemeriksaan?: string;
+}
 
 function hitungUsia(tanggalLahir: string) {
 	if (!tanggalLahir) return "-";
@@ -35,28 +38,59 @@ function hitungUsia(tanggalLahir: string) {
 }
 
 export default function ProfilePage() {
-		const navigate = useNavigate();
+	const navigate = useNavigate();
+	const { user, userData } = useAuth(); // Ambil data profil live dari Firebase Context
+	const [record, setRecord] = useState<MedicalRecord | null>(null);
+	const [loadingRecord, setLoadingRecord] = useState(true);
 
-	const handleLogout = () => {
-		localStorage.removeItem("pasien");
-		localStorage.removeItem("pasienUser");
-		localStorage.removeItem("user");
-		localStorage.removeItem("currentUser");
-
-		navigate("/login");
-	};
-	const [patient, setPatient] = useState<any>(null);
-
+	// Tarik data pemeriksaan terakhir secara live dari koleksi healthRecord
 	useEffect(() => {
-		const savedUser = localStorage.getItem("pasien");
+		if (!user?.uid) return;
 
-		if (savedUser) {
-			setPatient(JSON.parse(savedUser));
+		const q = query(collection(db, "healthRecord"), where("uid", "==", user.uid), orderBy("waktuPemeriksaan", "desc"), limit(1));
+
+		const unsubscribe = onSnapshot(
+			q,
+			(snapshot) => {
+				if (!snapshot.empty) {
+					setRecord(snapshot.docs[0].data() as MedicalRecord);
+				} else {
+					setRecord(null);
+				}
+				setRecordLoadingRecord(false);
+			},
+			(error) => {
+				console.error("Gagal memuat data rekam medis di profil:", error);
+				setLoadingRecord(false);
+			},
+		);
+
+		return () => unsubscribe();
+	}, [user]);
+
+	// Logout aman menggunakan Firebase Auth SDK resmi
+	const handleLogout = async () => {
+		try {
+			await signOut(auth);
+			navigate("/login");
+		} catch (error) {
+			console.error("Gagal melakukan proses logout:", error);
 		}
-	}, []);
+	};
+
+	// Helper merapikan tanggal pemeriksaan terformat lokal
+	const formatShortDate = (dateStr?: string) => {
+		if (!dateStr) return "-";
+		return new Date(dateStr).toLocaleDateString("id-ID", {
+			day: "numeric",
+			month: "short",
+			year: "numeric",
+		});
+	};
 
 	return (
 		<div className="bg-gray-50 min-h-screen pb-24">
+			{/* Navbar Header */}
 			<div className="bg-white px-6 py-4 flex justify-between items-center shadow-sm">
 				<div className="flex items-center gap-3">
 					<div className="w-11 h-11 rounded-full bg-white border-2 border-pink-100 p-1.5 flex items-center justify-center shadow-sm">
@@ -74,34 +108,25 @@ export default function ProfilePage() {
 			</div>
 
 			<div className="p-6 space-y-6">
-				<motion.div
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					className="pink-gradient rounded-[40px] p-7 text-white shadow-xl shadow-primary-pink/20 relative overflow-hidden"
-				>
+				{/* Kartu Profil Utama Sinematik */}
+				<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="pink-gradient rounded-[40px] p-7 text-white shadow-xl shadow-primary-pink/20 relative overflow-hidden">
 					<div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full" />
 					<div className="absolute -left-8 -bottom-12 w-36 h-36 bg-white/10 rounded-full" />
 
 					<div className="relative flex justify-between items-start mb-8">
 						<div className="flex items-center gap-5">
-							<div className="w-24 h-24 bg-white rounded-[32px] p-3 flex items-center justify-center shadow-inner">
+							<div className="w-24 h-24 bg-white rounded-[32px] p-3 flex items-center justify-center shadow-inner bg-opacity-95">
 								<img src={logoPosyandu} alt="Logo CAKET" className="w-full h-full object-contain" />
 							</div>
 							<div>
 								<div className="bg-white/20 border border-white/20 px-3 py-1 rounded-full inline-flex items-center gap-2 mb-3">
 									<ShieldCheck className="w-3.5 h-3.5" />
-									<span className="text-[10px] font-bold uppercase">
-										{patient?.role || "Pasien Aktif"}
-									</span>
+									<span className="text-[10px] font-bold uppercase">{userData?.role || "Pasien"}</span>
 								</div>
 
-								<h1 className="text-3xl font-black italic leading-tight">
-									{patient?.nama || "Pasien"}
-								</h1>
+								<h1 className="text-3xl font-black italic leading-tight">{userData?.nama || "Pasien"}</h1>
 
-								<p className="text-white/80 text-sm font-bold">
-									NIK: {patient?.nik || "-"}
-								</p>
+								<p className="text-white/80 text-sm font-bold">NIK: {userData?.nik || "-"}</p>
 							</div>
 						</div>
 
@@ -110,57 +135,48 @@ export default function ProfilePage() {
 						</button>
 					</div>
 
+					{/* 3 Parameter Ringkasan Atas */}
 					<div className="grid grid-cols-3 gap-3 relative">
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<UserRound className="w-5 h-5 mx-auto mb-2" />
 							<p className="text-[10px] font-bold opacity-80">Usia</p>
-							<p className="font-black">
-								{patient?.tanggalLahir ? hitungUsia(patient.tanggalLahir) : "-"}
-							</p>
+							<p className="font-black truncate">{userData?.tanggalLahir ? hitungUsia(userData.tanggalLahir) : "-"}</p>
 						</div>
 
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<HeartPulse className="w-5 h-5 mx-auto mb-2" />
-							<p className="text-[10px] font-bold opacity-80">Darah</p>
-							<p className="font-black">-</p>
+							<p className="text-[10px] font-bold opacity-80">Tensi</p>
+							<p className="font-black text-sm pt-0.5">{record?.tekananDarah?.sistolik ? `${record.tekananDarah.sistolik}/${record.tekananDarah.distolik}` : "-"}</p>
 						</div>
 
 						<div className="bg-white/15 border border-white/20 rounded-3xl p-4 text-center">
 							<Stethoscope className="w-5 h-5 mx-auto mb-2" />
 							<p className="text-[10px] font-bold opacity-80">Status</p>
-							<p className="font-black">Normal</p>
+							<p className="font-black truncate">{record?.status_pertumbuhan || "-"}</p>
 						</div>
 					</div>
 				</motion.div>
 
+				{/* Parameter Antropometri Utama */}
 				<div className="grid grid-cols-2 gap-4">
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.1 }}
-						className="bg-white rounded-[32px] p-6 border border-pink-50 shadow-sm"
-					>
+					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-[32px] p-6 border border-pink-50 shadow-sm">
 						<div className="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center mb-4">
 							<Weight className="text-secondary-pink" />
 						</div>
 						<p className="text-xs text-gray-400 font-bold uppercase mb-1">Berat Badan</p>
-						<p className="text-3xl font-black text-gray-800 italic">- kg</p>
+						<p className="text-3xl font-black text-gray-800 italic">{loadingRecord ? "..." : record ? `${record.beratBadan} kg` : "Belum ada"}</p>
 					</motion.div>
 
-					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.2 }}
-						className="bg-white rounded-[32px] p-6 border border-pink-50 shadow-sm"
-					>
+					<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white rounded-[32px] p-6 border border-pink-50 shadow-sm">
 						<div className="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center mb-4">
 							<Ruler className="text-secondary-pink" />
 						</div>
 						<p className="text-xs text-gray-400 font-bold uppercase mb-1">Tinggi Badan</p>
-						<p className="text-3xl font-black text-gray-800 italic">- cm</p>
+						<p className="text-3xl font-black text-gray-800 italic">{loadingRecord ? "..." : record ? `${record.tinggiBadan} cm` : "Belum ada"}</p>
 					</motion.div>
 				</div>
 
+				{/* Informasi Identitas Pasien */}
 				<div className="bg-white rounded-[36px] p-6 border border-pink-50 shadow-sm">
 					<h2 className="text-xl font-black text-gray-800 mb-5">Informasi Pasien</h2>
 
@@ -171,7 +187,7 @@ export default function ProfilePage() {
 							</div>
 							<div>
 								<p className="text-[10px] text-gray-400 font-bold uppercase">Nomor Telepon</p>
-								<p className="font-bold text-gray-800">{patient?.telepon || "-"}</p>
+								<p className="font-bold text-gray-800">{userData?.telepon || "-"}</p>
 							</div>
 						</div>
 
@@ -180,17 +196,18 @@ export default function ProfilePage() {
 								<MapPin className="w-5 h-5 text-secondary-pink" />
 							</div>
 							<div>
-								<p className="text-[10px] text-gray-400 font-bold uppercase">Alamat</p>
-								<p className="font-bold text-gray-800">{patient?.alamat || "-"}</p>
+								<p className="text-[10px] text-gray-400 font-bold uppercase">Alamat Domisili</p>
+								<p className="font-bold text-gray-800">{userData?.alamat || "-"}</p>
 							</div>
 						</div>
 					</div>
 				</div>
 
+				{/* Penanda Jadwal Log Kunjungan Klinis */}
 				<div className="bg-white rounded-[36px] p-6 border border-pink-50 shadow-sm">
 					<div className="flex justify-between items-center mb-5">
 						<h2 className="text-xl font-black text-gray-800">Jadwal Kesehatan</h2>
-						<button className="text-secondary-pink font-bold text-sm flex items-center gap-1">
+						<button onClick={() => navigate("/schedule")} className="text-secondary-pink font-bold text-sm flex items-center gap-1">
 							Detail <ChevronRight className="w-4 h-4" />
 						</button>
 					</div>
@@ -199,27 +216,26 @@ export default function ProfilePage() {
 						<div className="bg-gray-50 rounded-3xl p-5">
 							<CalendarDays className="text-secondary-pink w-6 h-6 mb-3" />
 							<p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Pemeriksaan Terakhir</p>
-							<p className="font-black text-gray-800">-</p>
+							<p className="font-black text-gray-800 text-sm">{loadingRecord ? "Memuat..." : record ? formatShortDate(record.waktuPemeriksaan) : "Belum pernah diperiksa"}</p>
 						</div>
 
-						<div className="bg-pink-50 rounded-3xl p-5">
+						<div className="bg-pink-50 rounded-3xl p-5 cursor-pointer hover:bg-pink-100/40 transition-colors" onClick={() => navigate("/schedule")}>
 							<CalendarDays className="text-secondary-pink w-6 h-6 mb-3" />
 							<p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Jadwal Berikutnya</p>
-							<p className="font-black text-gray-800">-</p>
+							<p className="font-black text-gray-800 text-sm">Cek Kalender</p>
 						</div>
 					</div>
 				</div>
 			</div>
-					<div className="px-6 pb-6">
-	<div className="bg-white rounded-[36px] p-6 border border-red-100 shadow-sm">
-		<button
-			onClick={handleLogout}
-			className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-3xl transition-all"
-		>
-			🚪 Logout
-		</button>
-	</div>
-</div>
+
+			{/* Tombol Logout Resmi SDK Keamanan */}
+			<div className="px-6 pb-6">
+				<div className="bg-white rounded-[36px] p-6 border border-red-100 shadow-sm">
+					<button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-3xl transition-all shadow-md shadow-red-100">
+						Status Sesi: Keluar Akun 🚪
+					</button>
+				</div>
+			</div>
 
 			<BottomNav />
 		</div>
