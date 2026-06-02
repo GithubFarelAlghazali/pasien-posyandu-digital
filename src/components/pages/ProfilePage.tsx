@@ -232,7 +232,7 @@ export default function ProfilePage() {
 			<div className="px-6 pb-6">
 				<div className="bg-white rounded-[36px] p-6 border border-red-100 shadow-sm">
 					<button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 bg-red-500 hover:bg-red-600 text-white font-bold py-4 rounded-3xl transition-all shadow-md shadow-red-100">
-						Status Sesi: Keluar Akun 🚪
+						LogOut
 					</button>
 				</div>
 			</div>
