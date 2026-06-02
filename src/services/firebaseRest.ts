@@ -29,6 +29,29 @@ export interface PasienUser {
   dibuat_pada: string;
 }
 
+export interface Schedule {
+  id?: string;
+  dibuat_oleh: string;
+  dibuat_pada: string;
+  kuota_maksimal: number;
+  lokasi: string;
+  nama_kegiatan: string;
+  status: string;
+  tanggal: string;
+  total_pendaftar: number;
+  waktu_mulai: string;
+  waktu_selesai: string;
+}
+
+export async function getSchedules() {
+  const result = await requestFirestore(`${FIRESTORE_BASE_URL}/schedules`);
+
+  return (result.documents || []).map((doc: any) => ({
+    id: getDocumentId(doc.name),
+    ...fromFirestoreFields(doc.fields || {}),
+  })) as Schedule[];
+}
+
 function toFirestoreValue(value: unknown): FirestoreValue {
   if (value === null || value === undefined) return { nullValue: null };
   if (typeof value === 'string') return { stringValue: value };
@@ -218,15 +241,4 @@ export async function registerPasien(data: PasienUser) {
   const user = await addDocument('users', data);
 
   return user;
-}
-
-export async function getHealthRecordByNik(nik: string) {
-  const records = await queryDocuments<HealthRecord>(
-    'healthRecords',
-    'nik',
-    'EQUAL',
-    nik
-  );
-
-  return records[0] || null;
 }
