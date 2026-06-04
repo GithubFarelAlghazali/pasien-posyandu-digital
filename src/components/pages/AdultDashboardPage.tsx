@@ -16,7 +16,7 @@ interface MedicalRecord {
 		sistolik: number | null;
 		distolik: number | null;
 	};
-	status_pertumbuhan: string;
+	status: string;
 	catatanKeluhan?: string;
 }
 
@@ -57,7 +57,7 @@ export default function AdultDashboardPage() {
 	useEffect(() => {
 		if (!user?.uid) return;
 
-		const q = query(collection(db, "healthRecord"), where("patient_uid", "==", user.uid), orderBy("waktuPemeriksaan", "desc"), limit(1));
+		const q = query(collection(db, "healthRecord"), where("patient_uid", "==", user.uid), orderBy("tanggalSaja", "desc"), limit(1));
 
 		const unsubscribe = onSnapshot(
 			q,
@@ -199,7 +199,7 @@ export default function AdultDashboardPage() {
 									</div>
 
 									<div className="w-16 h-16 rounded-full border-[3px] border-white/30 flex items-center justify-center bg-white/10 backdrop-blur-sm">
-										<span className="text-2xl">{record?.status_pertumbuhan === "Risiko" ? "😟" : record?.status_pertumbuhan === "Perhatian" ? "😐" : "😊"}</span>
+										<span className="text-2xl">{record?.status === "Risiko" ? "😟" : record?.status === "Perhatian" ? "😐" : "😊"}</span>
 									</div>
 								</motion.div>
 
@@ -261,7 +261,7 @@ export default function AdultDashboardPage() {
 									<div className="w-14 h-14 rounded-2xl bg-pink-100 flex items-center justify-center text-2xl shrink-0">💗</div>
 									<div>
 										<p className="text-xs text-gray-400 font-bold uppercase mb-1">Status Kesehatan</p>
-										<h3 className="text-xl font-black text-gray-800 mb-1">Kondisi kamu terlihat {record.status_pertumbuhan.toLowerCase()}</h3>
+										<h3 className="text-xl font-black text-gray-800 mb-1">Kondisi kamu terlihat {record.status.toLowerCase()}</h3>
 										<p className="text-sm text-gray-500 font-medium leading-relaxed">
 											{record.catatanKeluhan ? `Catatan Kader: "${record.catatanKeluhan}"` : "Tetap jaga pola makan, minum air putih yang cukup, dan rutin cek kesehatan di Posyandu."}
 										</p>

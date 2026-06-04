@@ -35,7 +35,7 @@ export default function HistoryPage() {
 	useEffect(() => {
 		if (!user?.uid) return;
 
-		const q = query(collection(db, "healthRecord"), where("patient_uid", "==", user.uid), orderBy("waktuPemeriksaan", "desc"));
+		const q = query(collection(db, "healthRecord"), where("patient_uid", "==", user.uid), orderBy("tanggalSaja", "desc"));
 
 		const unsubscribe = onSnapshot(
 			q,

@@ -17,8 +17,8 @@ interface MedicalRecord {
 		sistolik: number | null;
 		distolik: number | null;
 	};
-	status_pertumbuhan: string;
-	waktuPemeriksaan?: string;
+	status: string;
+	tanggalSaja?: string;
 }
 
 function hitungUsia(tanggalLahir: string) {
@@ -47,7 +47,7 @@ export default function ProfilePage() {
 	useEffect(() => {
 		if (!user?.uid) return;
 
-		const q = query(collection(db, "healthRecord"), where("uid", "==", user.uid), orderBy("waktuPemeriksaan", "desc"), limit(1));
+		const q = query(collection(db, "healthRecord"), where("patient_uid", "==", user.uid), orderBy("tanggalSaja", "desc"), limit(1));
 
 		const unsubscribe = onSnapshot(
 			q,
@@ -57,7 +57,7 @@ export default function ProfilePage() {
 				} else {
 					setRecord(null);
 				}
-				setRecordLoadingRecord(false);
+				setLoadingRecord(false);
 			},
 			(error) => {
 				console.error("Gagal memuat data rekam medis di profil:", error);
