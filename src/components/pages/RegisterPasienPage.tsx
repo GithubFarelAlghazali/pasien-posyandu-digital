@@ -13,20 +13,54 @@ export default function RegisterPasienPage() {
 	const [error, setError] = useState("");
 
 	// State form disesuaikan dengan struktur objek dokumen Firestore
+	// NOTE: Sudah ditambahkan field 'password' agar tidak crash/undefined saat dibaca
 	const [form, setForm] = useState({
 		nama: "",
 		email: "",
+		password: "",
+		confirmPassword: "",
 		nik: "",
 		alamat: "",
 		tanggalLahir: "",
 		telepon: "",
 		tipe: "anak", // Nilai default awal: [anak, hamil, dewasa, lansia]
-		gender: "",
-		confirmPassword: "",
+		gender: "laki-laki", // Berikan default value agar sinkron dengan UI select awal
 	});
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
+
+		// Logika Autofill +62 untuk input telepon
+		if (name === "telepon") {
+			// Jika kosong, biarkan kosong agar user bisa menghapus semua
+			if (value === "") {
+				setForm((prev) => ({ ...prev, [name]: "" }));
+				return;
+			}
+
+			// Bersihkan karakter non-angka kecuali tanda '+' di paling depan
+			let cleaned = value.replace(/(?!^\+)\D/g, "");
+
+			// Jika user mengetik angka biasa (misal mulai dari '8' atau '0'), otomatis jadikan +62
+			if (!cleaned.startsWith("+")) {
+				if (cleaned.startsWith("0")) {
+					cleaned = "+62" + cleaned.substring(1);
+				} else if (cleaned.startsWith("62")) {
+					cleaned = "+" + cleaned;
+				} else {
+					cleaned = "+62" + cleaned;
+				}
+			}
+
+			// Mencegah user menghapus paksa kode '+62' jika menyisakan substring parsial yang salah
+			if (cleaned.length < 3 && cleaned.startsWith("+")) {
+				cleaned = "+62";
+			}
+
+			setForm((prev) => ({ ...prev, [name]: cleaned }));
+			return;
+		}
+
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
@@ -58,7 +92,7 @@ export default function RegisterPasienPage() {
 		}
 
 		// 4. Validasi Pola Regex Telepon Standar +62
-		const phoneRegex = /^\+628[1-9][0-9]{7,10}$/;
+		const phoneRegex = /^\+628[1-9][0-9]{7,11}$/; // Diperlebar sampai 11 angka belakang untuk provider lokal baru
 		if (!phoneRegex.test(form.telepon.trim())) {
 			setError("Nomor telepon harus diawali +62 dan berformat valid (Contoh: +6281234567890).");
 			return;
@@ -71,7 +105,7 @@ export default function RegisterPasienPage() {
 			const userCredential = await createUserWithEmailAndPassword(auth, form.email.trim(), form.password);
 			const user = userCredential.user;
 
-			// 6. Petakan Payload Data ke Cloud Firestore (users collection) sesuai gambar skema kamu
+			// 6. Petakan Payload Data ke Cloud Firestore (users collection)
 			await setDoc(doc(db, "users", user.uid), {
 				uid: user.uid,
 				nama: form.nama.trim(),
@@ -87,7 +121,6 @@ export default function RegisterPasienPage() {
 			});
 
 			// 7. FORCE SIGN OUT INSTAN
-			// Mencegah Firebase Auth langsung menganggap user masuk sesi browser secara otomatis
 			await signOut(auth);
 
 			alert("Registrasi akun pasien berhasil! Silakan masuk menggunakan akun Anda.");
@@ -167,7 +200,6 @@ export default function RegisterPasienPage() {
 							/>
 						</div>
 
-						{/* INPUT SELECTION UNTUK MENENTUKAN TIPE KATEGORI PASIEN */}
 						<div>
 							<label className="block text-sm font-black text-gray-700 mb-1.5 uppercase tracking-wide">Kategori Peserta</label>
 							<select
